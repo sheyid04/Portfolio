@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abdulganiyu Akangbe</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink:     #1a1a2e;
+      --slate:   #2d3561;
+      --accent:  #c84b31;
+      --warm:    #f5f0eb;
+      --white:   #ffffff;
+      --muted:   #6b6b7b;
+      --light:   #a8a8b8;
+      --border:  #e4e0da;
+      --serif:   'DM Serif Display', serif;
+      --sans:    'DM Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--white); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.1rem 6rem;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: var(--serif); font-size: 1.3rem; color: var(--ink); text-decoration: none; }
+    .logo em { color: var(--accent); font-style: normal; }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; align-items: center; }
+    .nav-links a { font-size: 0.78rem; color: var(--muted); text-decoration: none; font-weight: 400; transition: color 0.2s; letter-spacing: 0.03em; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cv { background: var(--ink) !important; color: var(--white) !important; padding: 0.45rem 1.1rem !important; border-radius: 3px !important; font-weight: 500 !important; }
+    .nav-cv:hover { background: var(--slate) !important; }
+
+    /* HERO */
+    #hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 400px; padding-top: 64px; }
+    .hero-left {
+      background: var(--warm);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 5rem 6rem;
+    }
+    .hero-eyebrow { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.4rem; }
+    h1 { font-family: var(--serif); font-size: clamp(2.8rem, 4.5vw, 4.5rem); line-height: 1.08; color: var(--ink); margin-bottom: 1.4rem; }
+    h1 span { color: var(--slate); }
+    .hero-desc { font-size: 0.95rem; color: var(--muted); max-width: 420px; line-height: 1.85; margin-bottom: 2.6rem; }
+    .hero-desc b { color: var(--ink); font-weight: 500; }
+    .hero-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 2.8rem; background: var(--white); }
+    .hstat { padding: 1rem; text-align: center; border-right: 1px solid var(--border); }
+    .hstat:last-child { border-right: none; }
+    .hstat-n { font-family: var(--serif); font-size: 1.9rem; color: var(--accent); line-height: 1; display: block; }
+    .hstat-l { font-size: 0.6rem; color: var(--light); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.2rem; display: block; }
+    .hero-btns { display: flex; gap: 0.8rem; }
+    .btn { display: inline-flex; align-items: center; padding: 0.72rem 1.6rem; border-radius: 3px; font-family: var(--sans); font-size: 0.82rem; font-weight: 500; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; }
+    .btn-dark { background: var(--ink); color: var(--white); }
+    .btn-dark:hover { background: var(--slate); }
+    .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--ink); }
+
+    /* HERO RIGHT */
+    .hero-right { background: var(--ink); display: flex; flex-direction: column; }
+    .photo-wrap { flex: 1; overflow: hidden; position: relative; min-height: 360px; }
+    .photo-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(10%); }
+    .photo-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; }
+    .photo-fallback svg { width: 52px; height: 52px; color: var(--white); opacity: 0.15; }
+    .photo-fallback p { font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; text-transform: uppercase; }
+    .hero-card { padding: 1.8rem 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    .hcard-name { font-family: var(--serif); font-size: 1.1rem; color: var(--white); margin-bottom: 0.2rem; }
+    .hcard-role { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-bottom: 1.2rem; letter-spacing: 0.03em; }
+    .hcard-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .hlink { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; color: rgba(255,255,255,0.6); text-decoration: none; padding: 0.32rem 0.75rem; border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; transition: all 0.2s; }
+    .hlink svg { width: 10px; height: 10px; }
+    .hlink:hover { color: var(--white); border-color: rgba(255,255,255,0.4); }
+
+    /* SECTIONS */
+    .wrap { max-width: 1060px; margin: 0 auto; padding: 6rem 6rem; }
+    .sec-tag { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+    h2 { font-family: var(--serif); font-size: clamp(1.9rem, 3vw, 2.5rem); color: var(--ink); margin-bottom: 0.6rem; line-height: 1.1; }
+    .rule { width: 32px; height: 2px; background: var(--accent); margin-bottom: 3rem; margin-top: 0.4rem; }
+
+    /* ABOUT */
+    #about { background: var(--warm); border-top: 1px solid var(--border); }
+    .about-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 5rem; }
+    .about-text p { font-size: 0.92rem; color: var(--muted); margin-bottom: 1.1rem; line-height: 1.85; }
+    .about-text p b { color: var(--ink); font-weight: 500; }
+    .about-facts { display: flex; flex-direction: column; }
+    .arow { display: flex; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid var(--border); font-size: 0.82rem; }
+    .arow:last-child { border-bottom: none; }
+    .akey { color: var(--light); }
+    .aval { color: var(--ink); font-weight: 500; text-align: right; }
+
+    /* PROJECTS */
+    #projects { border-top: 1px solid var(--border); }
+    .pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .pcard { border: 1px solid var(--border); border-radius: 4px; padding: 1.8rem; transition: all 0.25s; position: relative; overflow: hidden; }
+    .pcard::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--accent); transition: height 0.3s; }
+    .pcard:hover { border-color: #ccc; box-shadow: 0 6px 30px rgba(0,0,0,0.06); }
+    .pcard:hover::before { height: 100%; }
+    .ptype { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+    .pcard h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); margin-bottom: 0.6rem; }
+    .pcard p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.2rem; }
+    .ptags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+    .ptag { font-size: 0.65rem; padding: 0.22rem 0.6rem; background: var(--warm); color: var(--muted); border-radius: 2px; border: 1px solid var(--border); }
+    .wip { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; color: var(--muted); }
+    .wip::before { content: ''; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* EXPERIENCE */
+    #experience { background: var(--warm); border-top: 1px solid var(--border); }
+    .elist { display: flex; flex-direction: column; }
+    .eitem { display: grid; grid-template-columns: 170px 1fr; gap: 3rem; padding: 2.4rem 0; border-bottom: 1px solid var(--border); }
+    .eitem:last-child { border-bottom: none; }
+    .ewhen { font-size: 0.75rem; color: var(--light); margin-bottom: 0.2rem; }
+    .ewhere { font-size: 0.75rem; color: var(--accent); font-weight: 500; }
+    .etitle { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); margin-bottom: 0.4rem; }
+    .enote { font-size: 0.8rem; color: var(--light); margin-bottom: 0.8rem; font-style: italic; }
+    .ebullets { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+    .ebullets li { font-size: 0.82rem; color: var(--muted); padding-left: 0.9rem; position: relative; line-height: 1.65; }
+    .ebullets li::before { content: '\2022'; position: absolute; left: 0; color: var(--accent); }
+    .ebullets li b { color: var(--ink); font-weight: 500; }
+
+    /* SKILLS */
+    #skills { border-top: 1px solid var(--border); }
+    .sgrid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+    .sblock { border: 1px solid var(--border); border-radius: 4px; padding: 1.4rem; transition: border-color 0.2s; }
+    .sblock:hover { border-color: var(--slate); }
+    .sblock h4 { font-size: 0.78rem; font-weight: 500; color: var(--ink); letter-spacing: 0.04em; margin-bottom: 0.9rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
+    .spills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .spill { font-size: 0.7rem; padding: 0.22rem 0.65rem; border: 1px solid var(--border); border-radius: 2px; color: var(--muted); background: var(--warm); }
+
+    /* CONTACT */
+    #contact { background: var(--ink); border-top: 1px solid var(--border); }
+    #contact .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    #contact .sec-tag { color: rgba(255,255,255,0.4); }
+    #contact h2 { color: var(--white); }
+    #contact .rule { background: var(--accent); }
+    #contact p { font-size: 0.92rem; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 1.8rem; }
+    .clinks { display: flex; flex-direction: column; gap: 0.8rem; }
+    .clink { display: flex; align-items: center; gap: 0.9rem; padding: 0.9rem 1.1rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; text-decoration: none; color: var(--white); transition: all 0.2s; }
+    .clink:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
+    .cicon { width: 32px; height: 32px; background: rgba(255,255,255,0.06); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .cicon svg { width: 14px; height: 14px; color: var(--accent); }
+    .clabel { font-size: 0.62rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.07em; display: block; }
+    .cval { font-size: 0.84rem; color: var(--white); font-weight: 400; }
+
+    /* FOOTER */
+    footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.08); padding: 1.2rem 6rem; display: flex; justify-content: space-between; font-size: 0.72rem; color: rgba(255,255,255,0.25); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .reveal.on { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.16s; }
+
+    @media(max-width:900px){
+      nav { padding: 1rem 1.5rem; } .nav-links { display: none; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 5rem 1.5rem 3rem; }
+      .hero-right { order: -1; min-height: 280px; }
+      .wrap { padding: 4rem 1.5rem; }
+      .about-grid,.pgrid,.sgrid { grid-template-columns: 1fr; gap: 2rem; }
+      #contact .wrap { grid-template-columns: 1fr; gap: 2rem; }
+      .eitem { grid-template-columns: 1fr; gap: 0.3rem; }
+      footer { padding: 1rem 1.5rem; flex-direction: column; gap: 0.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="logo">A<em>.</em>Akangbe</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="Abdulganiyu Akangbe CV.docx" class="nav-cv">Download CV</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Operational Delivery and Data Analytics</p>
+    <h1>Abdulganiyu<br><span>Akangbe</span></h1>
+    <p class="hero-desc">Working at the intersection of <b>public service delivery and data</b>. Managing complex caseloads, supporting vulnerable families into employment, and using data to make that work sharper.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">120+</span><span class="hstat-l">Cases managed</span></div>
+      <div class="hstat"><span class="hstat-n">32%</span><span class="hstat-l">Backlog cut</span></div>
+      <div class="hstat"><span class="hstat-n">70%</span><span class="hstat-l">First contact</span></div>
+      <div class="hstat"><span class="hstat-n">4+</span><span class="hstat-l">Years public sector</span></div>
+    </div>
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-dark">View Projects</a>
+      <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+      <a href="Abdulganiyu Akangbe CV.docx" class="btn btn-ghost">Download CV</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="photo-wrap">
+      <img src="photo.jpg" alt="Abdulganiyu Akangbe" onerror="this.style.display='none'" />
+      <div class="photo-fallback">
+        <svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
+        <p>Upload photo.jpg</p>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hcard-name">Abdulganiyu Akangbe</div>
+      <div class="hcard-role">Welfare Support Officer · DWP Glasgow</div>
+      <div class="hcard-links">
+        <a href="https://www.linkedin.com/in/abdulganiyu-akangbe-083668240" target="_blank" class="hlink">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/sheyid" target="_blank" class="hlink">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C7.604 9.39 6.815 9.02 6.815 9.02c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
+          GitHub
+        </a>
+        <a href="mailto:sheyid04@gmail.com" class="hlink">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Email
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap reveal">
+    <p class="sec-tag">About</p>
+    <h2>Who I Am</h2>
+    <div class="rule"></div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I am an operational delivery professional with over 4 years of experience managing complex caseloads, improving public service processes, and supporting vulnerable people to achieve real outcomes. My background spans <b>DWP, NHS Lanarkshire, and university research</b>.</p>
+        <p>I currently hold dual roles at DWP as both an <b>Operational Delivery Officer</b> and <b>Welfare Support Officer</b> in Glasgow, working with parents and families affected by child poverty. I built Power BI dashboards that gave line managers breach visibility they did not have before, and triage systems that cut case backlogs by 32%.</p>
+        <p>I am deepening my data practice through the <b>Cambridge Spark Data Citizen Apprenticeship</b> in partnership with DWP. MSc qualified. Glasgow based. Originally from Nigeria.</p>
+      </div>
+      <div class="about-facts">
+        <div class="arow"><span class="akey">Current role</span><span class="aval">Welfare Support Officer</span></div>
+        <div class="arow"><span class="akey">Also</span><span class="aval">Operational Delivery Officer</span></div>
+        <div class="arow"><span class="akey">Learning</span><span class="aval">Cambridge Spark Apprenticeship</span></div>
+        <div class="arow"><span class="akey">Education</span><span class="aval">MSc Chemical Engineering</span></div>
+        <div class="arow"><span class="akey">Location</span><span class="aval">Glasgow, Scotland</span></div>
+        <div class="arow"><span class="akey">Status</span><span class="aval">Open to opportunities</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap reveal">
+    <p class="sec-tag">Projects</p>
+    <h2>Selected Work</h2>
+    <div class="rule"></div>
+    <div class="pgrid">
+      <div class="pcard reveal d1">
+        <p class="ptype">Data and Operations</p>
+        <h3>UC Caseload Dashboard</h3>
+        <p>A Power BI dashboard visualising Universal Credit case data to track compliance risk, breach patterns, and case progression, giving managers early intervention capability.</p>
+        <div class="ptags"><span class="ptag">Power BI</span><span class="ptag">DAX</span><span class="ptag">Excel</span><span class="ptag">CRM Data</span></div>
+        <span class="wip">In progress</span>
+      </div>
+      <div class="pcard reveal d2">
+        <p class="ptype">Data Analysis</p>
+        <h3>Case Backlog Analyser</h3>
+        <p>Identifies patterns in case escalations using open DWP datasets. Applies priority logic to surface which cases need immediate action and which can be batched.</p>
+        <div class="ptags"><span class="ptag">Python</span><span class="ptag">pandas</span><span class="ptag">Excel</span><span class="ptag">Data Cleaning</span></div>
+        <span class="wip">In progress</span>
+      </div>
+      <div class="pcard reveal d1">
+        <p class="ptype">Reporting</p>
+        <h3>Welfare Open Data Report</h3>
+        <p>Analysis of publicly available welfare and employment statistics to identify trends in claimant progression, employment barriers, and regional disparities across Scotland.</p>
+        <div class="ptags"><span class="ptag">SQL</span><span class="ptag">Power BI</span><span class="ptag">Government Data</span></div>
+        <span class="wip">In progress</span>
+      </div>
+      <div class="pcard reveal d2">
+        <p class="ptype">Apprenticeship Portfolio</p>
+        <h3>Cambridge Spark Projects</h3>
+        <p>Real workplace analytics and reporting projects from the Data Citizen Apprenticeship covering dashboarding, automation, data storytelling, and business intelligence.</p>
+        <div class="ptags"><span class="ptag">Power BI</span><span class="ptag">Advanced Excel</span><span class="ptag">Python</span><span class="ptag">BI</span></div>
+        <span class="wip">In progress</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap reveal">
+    <p class="sec-tag">Experience</p>
+    <h2>Career History</h2>
+    <div class="rule"></div>
+    <div class="elist">
+      <div class="eitem">
+        <div><div class="ewhen">Feb 2026 – Present</div><div class="ewhere">DWP, Glasgow</div></div>
+        <div>
+          <div class="etitle">Welfare Support Officer</div>
+          <div class="enote">Supporting parents in poverty across Glasgow Central District as part of DWP's partnership with Glasgow City Council on child poverty.</div>
+          <ul class="ebullets">
+            <li>Manage <b>80+ parent caseloads</b> with 70% first-contact resolution accuracy</li>
+            <li>Increased referral uptake across <b>12+ partner organisations</b> by 40%</li>
+            <li>Placed <b>15+ claimants into employment</b> within the first 6 months</li>
+            <li>Reach <b>25+ additional claimants per month</b> through community outreach</li>
+            <li>60% of coached claimants move into work or training within 3 months</li>
+          </ul>
+        </div>
+      </div>
+      <div class="eitem">
+        <div><div class="ewhen">Apr 2025 – Present</div><div class="ewhere">DWP, UK</div></div>
+        <div>
+          <div class="etitle">Operational Delivery Officer</div>
+          <div class="enote">Managing Universal Credit caseloads and building data tools to improve operational visibility and compliance.</div>
+          <ul class="ebullets">
+            <li>Manage <b>120+ UC cases</b>, reducing non-engagement by over 30%</li>
+            <li>Built Power BI dashboards improving breach visibility by <b>38%</b></li>
+            <li>Triaged 200+ escalations, cutting case backlog by <b>32%</b></li>
+            <li>Maintained <b>98% compliance accuracy</b> across all managed claims</li>
+            <li>Reduced repeat queries by <b>25%</b> by rewriting claimant communications</li>
+          </ul>
+        </div>
+      </div>
+      <div class="eitem">
+        <div><div class="ewhen">May 2023 – Apr 2025</div><div class="ewhere">NHS Lanarkshire</div></div>
+        <div>
+          <div class="etitle">Frontline Operational Support Officer</div>
+          <ul class="ebullets">
+            <li>Reduced documentation errors by <b>25%</b> through workflow redesign</li>
+            <li>Contributed to an <b>18% reduction</b> in average patient waiting times</li>
+            <li>Cut urgent supply requests by <b>40%</b> with a stock rotation system</li>
+            <li>Improved infection prevention audit scores by <b>15%</b></li>
+            <li>Reduced equipment-related delays by <b>30%</b> with a preparation checklist</li>
+          </ul>
+        </div>
+      </div>
+      <div class="eitem">
+        <div><div class="ewhen">Nov 2022 – May 2023</div><div class="ewhere">University of the West of Scotland</div></div>
+        <div>
+          <div class="etitle">Research Officer</div>
+          <div class="enote">Funded laboratory research into microalgae cultivation for renewable energy applications.</div>
+          <ul class="ebullets">
+            <li>Demonstrated a <b>17.5% increase</b> in biomass productivity under blue LED light</li>
+            <li>Achieved a validated specific growth rate of <b>3.526 per day</b></li>
+            <li>Identified the optimal lipid extraction solvent across multi-solvent trials</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap reveal">
+    <p class="sec-tag">Skills</p>
+    <h2>What I Work With</h2>
+    <div class="rule"></div>
+    <div class="sgrid">
+      <div class="sblock">
+        <h4>Data and Analytics</h4>
+        <div class="spills"><span class="spill">Power BI</span><span class="spill">Advanced Excel</span><span class="spill">DAX</span><span class="spill">Data Visualisation</span><span class="spill">Dashboarding</span><span class="spill">Data Storytelling</span><span class="spill">SQL (developing)</span><span class="spill">Python (developing)</span></div>
+      </div>
+      <div class="sblock">
+        <h4>Operational Delivery</h4>
+        <div class="spills"><span class="spill">Caseload Management</span><span class="spill">UC Compliance</span><span class="spill">RAG Triage</span><span class="spill">Process Improvement</span><span class="spill">Audit and Compliance</span><span class="spill">Escalation Handling</span></div>
+      </div>
+      <div class="sblock">
+        <h4>Strategy and Policy</h4>
+        <div class="spills"><span class="spill">Policy Development</span><span class="spill">Governance Design</span><span class="spill">Risk Analysis</span><span class="spill">Change Management</span><span class="spill">Strategic Communication</span><span class="spill">Stakeholder Engagement</span></div>
+      </div>
+      <div class="sblock">
+        <h4>Tools and Platforms</h4>
+        <div class="spills"><span class="spill">Microsoft 365</span><span class="spill">CRM Systems</span><span class="spill">GitHub</span><span class="spill">MATLAB</span><span class="spill">Aspen HYSYS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap reveal">
+    <p class="sec-tag">Contact</p>
+    <h2>Get In Touch</h2>
+    <div class="rule"></div>
+    <p>Open to data analyst, reporting analyst, business intelligence, and operational delivery roles. Based in Glasgow. Always happy to connect.</p>
+    <div style="display:grid; grid-template-columns:auto 1fr; gap:3rem; align-items:start; margin-top:1rem;">
+      <a href="Abdulganiyu Akangbe CV.docx" class="btn" style="background:var(--accent);color:#fff;align-self:start;">Download CV</a>
+      <div class="clinks">
+        <a href="mailto:sheyid04@gmail.com" class="clink">
+          <div class="cicon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+          <div><span class="clabel">Email</span><span class="cval">sheyid04@gmail.com</span></div>
+        </a>
+        <a href="https://www.linkedin.com/in/abdulganiyu-akangbe-083668240" target="_blank" class="clink">
+          <div class="cicon"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
+          <div><span class="clabel">LinkedIn</span><span class="cval">abdulganiyu-akangbe</span></div>
+        </a>
+        <a href="https://github.com/sheyid" target="_blank" class="clink">
+          <div class="cicon"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C7.604 9.39 6.815 9.02 6.815 9.02c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg></div>
+          <div><span class="clabel">GitHub</span><span class="cval">github.com/sheyid</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Abdulganiyu Akangbe &middot; Glasgow, Scotland &middot; 2026</span>
+  <span>Built with HTML and CSS</span>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
