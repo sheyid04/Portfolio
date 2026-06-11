@@ -1,342 +1,351 @@
+cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffffff" />
   <title>Abdulganiyu Akangbe</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --ink:    #1a1a2e;
-      --slate:  #2d3561;
-      --accent: #c84b31;
-      --warm:   #f5f0eb;
-      --white:  #ffffff;
-      --muted:  #6b6b7b;
-      --light:  #a8a8b8;
-      --border: #e4e0da;
-      --serif:  'DM Serif Display', serif;
-      --sans:   'DM Sans', sans-serif;
+      --ink:     #1a1a2e;
+      --slate:   #2d3561;
+      --accent:  #c84b31;
+      --warm:    #f5f0eb;
+      --white:   #ffffff;
+      --muted:   #6b6b7b;
+      --light:   #a8a8b8;
+      --border:  #e4e0da;
+      --serif:   'DM Serif Display', serif;
+      --sans:    'DM Sans', sans-serif;
+      --nav-h:   56px;
     }
-    html { scroll-behavior: smooth; }
-    body { background: var(--white); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { background: var(--white); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; }
+
+    /* ─── NAV ─────────────────────────────────────────────────── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      height: var(--nav-h);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 5vw;
+    }
+    .nav-logo { font-family: var(--serif); font-size: 1.2rem; color: var(--ink); text-decoration: none; flex: 1; }
+    .nav-logo em { color: var(--accent); font-style: normal; }
+
+    .nav-desktop { display: none; gap: 1.8rem; list-style: none; align-items: center; }
+    .nav-desktop a { font-size: 0.78rem; color: var(--muted); text-decoration: none; font-weight: 400; transition: color 0.2s; }
+    .nav-desktop a:hover { color: var(--ink); }
+    .nav-desktop .nav-btn { background: var(--ink); color: var(--white) !important; padding: 0.4rem 1rem; border-radius: 3px; font-weight: 500 !important; transition: background 0.2s; }
+    .nav-desktop .nav-btn:hover { background: var(--slate); }
+
+    .nav-ham { background: none; border: none; cursor: pointer; padding: 6px; display: flex; flex-direction: column; gap: 5px; -webkit-tap-highlight-color: transparent; }
+    .nav-ham span { display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 2px; transition: transform 0.28s, opacity 0.28s; }
+    .nav-ham.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-ham.is-open span:nth-child(2) { opacity: 0; }
+    .nav-ham.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav-drawer {
+      position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 490;
       background: var(--white); border-bottom: 1px solid var(--border);
-      padding: 0 1.5rem;
-      height: 60px;
-      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.32s ease, padding 0.32s ease;
     }
-    .logo { font-family: var(--serif); font-size: 1.2rem; color: var(--ink); text-decoration: none; }
-    .logo em { color: var(--accent); font-style: normal; }
+    .nav-drawer.is-open { max-height: 360px; padding: 0.5rem 5vw 1rem; }
+    .nav-drawer a { display: block; font-size: 0.92rem; color: var(--muted); text-decoration: none; padding: 0.65rem 0; border-bottom: 1px solid var(--border); font-weight: 400; -webkit-tap-highlight-color: transparent; }
+    .nav-drawer a:last-child { border-bottom: none; color: var(--accent); font-weight: 500; }
+    .nav-drawer a:hover { color: var(--ink); }
 
-    /* Hamburger */
-    .hamburger { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
-    .hamburger span { width: 22px; height: 2px; background: var(--ink); border-radius: 2px; transition: all 0.3s; display: block; }
-    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-    /* Mobile menu */
-    .nav-menu {
-      display: none; flex-direction: column;
-      position: fixed; top: 60px; left: 0; right: 0;
-      background: var(--white); border-bottom: 1px solid var(--border);
-      padding: 1.2rem 1.5rem; gap: 0; z-index: 199;
-    }
-    .nav-menu.open { display: flex; }
-    .nav-menu a {
-      font-size: 0.9rem; color: var(--muted); text-decoration: none;
-      padding: 0.75rem 0; border-bottom: 1px solid var(--border);
-      font-weight: 400;
-    }
-    .nav-menu a:last-child { border-bottom: none; color: var(--accent); font-weight: 500; }
-    .nav-menu a:hover { color: var(--ink); }
-
-    /* Desktop nav */
-    .nav-links-desktop {
-      display: none; gap: 2rem; list-style: none; align-items: center;
-    }
-    .nav-links-desktop a { font-size: 0.78rem; color: var(--muted); text-decoration: none; font-weight: 400; transition: color 0.2s; }
-    .nav-links-desktop a:hover { color: var(--ink); }
-    .nav-cv-d { background: var(--ink) !important; color: var(--white) !important; padding: 0.4rem 1rem !important; border-radius: 3px !important; font-weight: 500 !important; }
-    .nav-cv-d:hover { background: var(--slate) !important; }
-
-    /* ── HERO ── */
-    #hero {
-      padding-top: 60px;
+    /* ─── HERO ────────────────────────────────────────────────── */
+    .hero {
+      padding-top: var(--nav-h);
       min-height: 100svh;
       display: flex; flex-direction: column;
     }
-    .hero-content {
+    .hero-body {
       background: var(--warm);
-      padding: 3rem 1.5rem 2.5rem;
       flex: 1;
+      padding: 3rem 5vw 2.5rem;
       display: flex; flex-direction: column; justify-content: center;
     }
-    .hero-eyebrow { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
-    h1 { font-family: var(--serif); font-size: clamp(2.4rem, 8vw, 5rem); line-height: 1.05; color: var(--ink); margin-bottom: 1.2rem; }
-    h1 span { color: var(--slate); }
-    .hero-desc { font-size: 0.92rem; color: var(--muted); line-height: 1.85; margin-bottom: 2rem; max-width: 480px; }
-    .hero-desc b { color: var(--ink); font-weight: 500; }
+    .hero-tag { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .hero-name { font-family: var(--serif); font-size: clamp(2.6rem, 9vw, 5.2rem); line-height: 1.02; color: var(--ink); margin-bottom: 1.2rem; }
+    .hero-name span { color: var(--slate); display: block; }
+    .hero-lead { font-size: 0.92rem; color: var(--muted); line-height: 1.85; margin-bottom: 2rem; max-width: 48ch; }
+    .hero-lead b { color: var(--ink); font-weight: 500; }
 
-    .hero-stats {
+    .stats-grid {
       display: grid; grid-template-columns: repeat(2, 1fr);
       border: 1px solid var(--border); border-radius: 4px;
       overflow: hidden; background: var(--white);
       margin-bottom: 2rem;
     }
-    .hstat { padding: 0.9rem 1rem; text-align: center; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .hstat:nth-child(2) { border-right: none; }
-    .hstat:nth-child(3) { border-bottom: none; }
-    .hstat:nth-child(4) { border-right: none; border-bottom: none; }
-    .hstat-n { font-family: var(--serif); font-size: 1.7rem; color: var(--accent); line-height: 1; display: block; }
-    .hstat-l { font-size: 0.58rem; color: var(--light); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 0.2rem; display: block; }
+    .stat { padding: 0.85rem 1rem; text-align: center; }
+    .stat:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+    .stat:nth-child(odd) { border-right: 1px solid var(--border); }
+    .stat-n { font-family: var(--serif); font-size: 1.75rem; color: var(--accent); line-height: 1; display: block; }
+    .stat-l { font-size: 0.58rem; color: var(--light); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.2rem; display: block; }
 
-    .hero-btns { display: flex; flex-wrap: wrap; gap: 0.7rem; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.7rem 1.4rem; border-radius: 3px; font-family: var(--sans); font-size: 0.82rem; font-weight: 500; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; }
-    .btn-dark { background: var(--ink); color: var(--white); }
-    .btn-dark:hover { background: var(--slate); }
-    .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--border); }
-    .btn-ghost:hover { border-color: var(--ink); }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.68rem 1.3rem; border-radius: 3px; font-family: var(--sans); font-size: 0.82rem; font-weight: 500; text-decoration: none; transition: all 0.18s; border: none; cursor: pointer; -webkit-tap-highlight-color: transparent; white-space: nowrap; }
+    .btn-fill { background: var(--ink); color: var(--white); }
+    .btn-fill:hover, .btn-fill:active { background: var(--slate); }
+    .btn-line { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+    .btn-line:hover, .btn-line:active { border-color: var(--ink); }
+    .btn-accent { background: var(--accent); color: var(--white); }
+    .btn-accent:hover, .btn-accent:active { opacity: 0.88; }
 
-    /* Hero photo strip */
-    .hero-photo-strip {
+    /* Hero photo footer strip (mobile) */
+    .hero-strip {
       background: var(--ink);
-      display: flex; align-items: center; gap: 1rem;
-      padding: 1.2rem 1.5rem;
+      padding: 1rem 5vw;
+      display: flex; align-items: center; gap: 0.9rem;
     }
-    .hero-photo-thumb {
-      width: 52px; height: 52px; border-radius: 50%;
-      overflow: hidden; flex-shrink: 0;
-      background: rgba(255,255,255,0.1);
+    .strip-avatar {
+      width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+      overflow: hidden; background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.18);
       display: flex; align-items: center; justify-content: center;
-      border: 2px solid rgba(255,255,255,0.2);
     }
-    .hero-photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .hero-photo-thumb svg { width: 24px; height: 24px; color: rgba(255,255,255,0.3); }
-    .hero-strip-info { flex: 1; }
-    .hero-strip-name { font-family: var(--serif); font-size: 0.95rem; color: var(--white); }
-    .hero-strip-role { font-size: 0.7rem; color: rgba(255,255,255,0.45); }
-    .hero-strip-links { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
-    .slink { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.65rem; color: rgba(255,255,255,0.55); text-decoration: none; padding: 0.25rem 0.6rem; border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; transition: all 0.2s; }
-    .slink svg { width: 9px; height: 9px; }
-    .slink:hover { color: var(--white); border-color: rgba(255,255,255,0.35); }
+    .strip-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .strip-avatar svg { width: 22px; height: 22px; color: rgba(255,255,255,0.25); }
+    .strip-meta { flex: 1; min-width: 0; }
+    .strip-name { font-family: var(--serif); font-size: 0.92rem; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .strip-role { font-size: 0.68rem; color: rgba(255,255,255,0.45); margin-bottom: 0.5rem; }
+    .strip-pills { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .spill { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.62rem; color: rgba(255,255,255,0.55); text-decoration: none; padding: 0.22rem 0.6rem; border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; transition: all 0.18s; -webkit-tap-highlight-color: transparent; }
+    .spill svg { width: 8px; height: 8px; flex-shrink: 0; }
+    .spill:hover { color: var(--white); border-color: rgba(255,255,255,0.35); }
 
-    /* ── SECTIONS ── */
-    .section { padding: 3.5rem 1.5rem; }
-    .section-alt { background: var(--warm); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .sec-tag { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
-    h2 { font-family: var(--serif); font-size: clamp(1.7rem, 5vw, 2.5rem); color: var(--ink); margin-bottom: 0.4rem; line-height: 1.1; }
-    .rule { width: 28px; height: 2px; background: var(--accent); margin-bottom: 2rem; margin-top: 0.3rem; }
+    /* Desktop hero photo sidebar */
+    .hero-sidebar { display: none; }
 
-    /* ── ABOUT ── */
-    .about-text p { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.85; }
-    .about-text p b { color: var(--ink); font-weight: 500; }
-    .about-facts { margin-top: 1.5rem; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--white); }
-    .arow { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.82rem; gap: 1rem; }
-    .arow:last-child { border-bottom: none; }
-    .akey { color: var(--light); white-space: nowrap; }
-    .aval { color: var(--ink); font-weight: 500; text-align: right; }
+    /* ─── SECTIONS ────────────────────────────────────────────── */
+    .sec { padding: 3.5rem 5vw; }
+    .sec-warm { background: var(--warm); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .sec-dark { background: var(--ink); border-top: 1px solid var(--border); }
 
-    /* ── PROJECTS ── */
-    .pgrid { display: flex; flex-direction: column; gap: 1rem; }
-    .pcard { border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; transition: all 0.25s; position: relative; overflow: hidden; }
-    .pcard::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
-    .pcard:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-    .pcard:hover::before { transform: scaleX(1); }
-    .ptype { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
-    .pcard h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); margin-bottom: 0.5rem; }
+    .sec-tag { font-size: 0.63rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.35rem; }
+    .sec-dark .sec-tag { color: rgba(255,255,255,0.4); }
+    h2 { font-family: var(--serif); font-size: clamp(1.7rem, 5vw, 2.6rem); color: var(--ink); line-height: 1.08; margin-bottom: 0.35rem; }
+    .sec-dark h2 { color: var(--white); }
+    .rule { width: 26px; height: 2px; background: var(--accent); margin-bottom: 2rem; margin-top: 0.3rem; }
+
+    /* About */
+    .about-copy p { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.85; }
+    .about-copy p b { color: var(--ink); font-weight: 500; }
+    .fact-table { margin-top: 1.5rem; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--white); }
+    .frow { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.82rem; gap: 1rem; }
+    .frow:last-child { border-bottom: none; }
+    .fkey { color: var(--light); flex-shrink: 0; }
+    .fval { color: var(--ink); font-weight: 500; text-align: right; }
+
+    /* Projects */
+    .project-grid { display: flex; flex-direction: column; gap: 1rem; }
+    .pcard { border: 1px solid var(--border); border-radius: 6px; padding: 1.4rem; position: relative; overflow: hidden; transition: box-shadow 0.2s, border-color 0.2s; }
+    .pcard::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.28s; }
+    .pcard:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); border-color: #ccc; }
+    .pcard:hover::after { transform: scaleX(1); }
+    .ptype { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.45rem; }
+    .pcard h3 { font-family: var(--serif); font-size: 1.08rem; color: var(--ink); margin-bottom: 0.45rem; }
     .pcard p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
-    .ptags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.9rem; }
-    .ptag { font-size: 0.62rem; padding: 0.2rem 0.55rem; background: var(--warm); color: var(--muted); border-radius: 2px; border: 1px solid var(--border); }
-    .wip { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.68rem; color: var(--muted); }
-    .wip::before { content: ''; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: blink 2s infinite; flex-shrink: 0; }
-    .live-link { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; color: var(--accent); font-weight: 500; text-decoration: none; }
-    .live-link svg { width: 10px; height: 10px; flex-shrink: 0; }
-    .live-link:hover { opacity: 0.75; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .ptags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.85rem; }
+    .ptag { font-size: 0.6rem; padding: 0.18rem 0.55rem; background: var(--warm); color: var(--muted); border-radius: 2px; border: 1px solid var(--border); }
+    .badge-wip { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.66rem; color: var(--muted); }
+    .badge-wip::before { content: ''; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; flex-shrink: 0; animation: blink 2s infinite; }
+    .badge-live { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.66rem; color: var(--accent); font-weight: 500; text-decoration: none; }
+    .badge-live svg { width: 10px; height: 10px; flex-shrink: 0; }
+    .badge-live:hover { opacity: 0.75; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.25} }
 
-    /* ── EXPERIENCE ── */
-    .eitem { padding: 2rem 0; border-bottom: 1px solid var(--border); }
-    .eitem:last-child { border-bottom: none; }
-    .emeta { margin-bottom: 0.6rem; }
-    .ewhen { font-size: 0.72rem; color: var(--light); }
-    .ewhere { font-size: 0.72rem; color: var(--accent); font-weight: 500; margin-top: 0.1rem; }
-    .etitle { font-family: var(--serif); font-size: 1.05rem; color: var(--ink); margin-bottom: 0.35rem; margin-top: 0.4rem; }
-    .enote { font-size: 0.78rem; color: var(--light); margin-bottom: 0.7rem; font-style: italic; line-height: 1.5; }
-    .ebullets { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
-    .ebullets li { font-size: 0.82rem; color: var(--muted); padding-left: 0.9rem; position: relative; line-height: 1.6; }
-    .ebullets li::before { content: '\2022'; position: absolute; left: 0; color: var(--accent); }
-    .ebullets li b { color: var(--ink); font-weight: 500; }
+    /* Experience */
+    .exp-list { display: flex; flex-direction: column; }
+    .exp { padding: 2rem 0; border-bottom: 1px solid var(--border); }
+    .exp:last-child { border-bottom: none; }
+    .exp-meta { margin-bottom: 0.5rem; }
+    .exp-when { font-size: 0.7rem; color: var(--light); }
+    .exp-org { font-size: 0.7rem; color: var(--accent); font-weight: 500; margin-top: 0.1rem; }
+    .exp-title { font-family: var(--serif); font-size: 1.05rem; color: var(--ink); margin-bottom: 0.3rem; margin-top: 0.4rem; }
+    .exp-note { font-size: 0.78rem; color: var(--light); margin-bottom: 0.7rem; font-style: italic; line-height: 1.55; }
+    .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.38rem; }
+    .exp-bullets li { font-size: 0.82rem; color: var(--muted); padding-left: 0.9rem; position: relative; line-height: 1.6; }
+    .exp-bullets li::before { content: '\2022'; position: absolute; left: 0; color: var(--accent); line-height: 1.6; }
+    .exp-bullets li b { color: var(--ink); font-weight: 500; }
 
-    /* ── SKILLS ── */
-    .sgrid { display: flex; flex-direction: column; gap: 0.9rem; }
-    .sblock { border: 1px solid var(--border); border-radius: 4px; padding: 1.2rem; }
-    .sblock h4 { font-size: 0.76rem; font-weight: 500; color: var(--ink); letter-spacing: 0.04em; margin-bottom: 0.8rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); }
-    .spills { display: flex; flex-wrap: wrap; gap: 0.3rem; }
-    .spill { font-size: 0.68rem; padding: 0.2rem 0.6rem; border: 1px solid var(--border); border-radius: 20px; color: var(--muted); background: var(--warm); }
+    /* Skills */
+    .skill-grid { display: flex; flex-direction: column; gap: 0.85rem; }
+    .sblock { border: 1px solid var(--border); border-radius: 4px; padding: 1.1rem; }
+    .sblock h4 { font-size: 0.76rem; font-weight: 500; color: var(--ink); margin-bottom: 0.75rem; padding-bottom: 0.55rem; border-bottom: 1px solid var(--border); }
+    .skill-pills { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    .sk { font-size: 0.68rem; padding: 0.2rem 0.58rem; border: 1px solid var(--border); border-radius: 20px; color: var(--muted); background: var(--warm); }
 
-    /* ── CONTACT ── */
-    #contact { background: var(--ink); border-top: 1px solid var(--border); }
-    #contact .sec-tag { color: rgba(255,255,255,0.4); }
-    #contact h2 { color: var(--white); }
-    #contact .rule { background: var(--accent); }
-    #contact p { font-size: 0.9rem; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 1.5rem; }
-    .clinks { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 1.5rem; }
-    .clink { display: flex; align-items: center; gap: 0.9rem; padding: 0.85rem 1rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; text-decoration: none; color: var(--white); transition: all 0.2s; }
-    .clink:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
-    .cicon { width: 32px; height: 32px; background: rgba(255,255,255,0.06); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .cicon svg { width: 14px; height: 14px; color: var(--accent); }
-    .clabel { font-size: 0.6rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.07em; display: block; }
-    .cval { font-size: 0.84rem; color: var(--white); font-weight: 400; }
+    /* Contact */
+    .contact-text p { font-size: 0.9rem; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 1.5rem; }
+    .c-links { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.5rem; }
+    .c-link { display: flex; align-items: center; gap: 0.85rem; padding: 0.82rem 1rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; text-decoration: none; color: var(--white); transition: all 0.18s; -webkit-tap-highlight-color: transparent; }
+    .c-link:hover, .c-link:active { border-color: rgba(255,255,255,0.28); background: rgba(255,255,255,0.04); }
+    .c-icon { width: 32px; height: 32px; background: rgba(255,255,255,0.06); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .c-icon svg { width: 14px; height: 14px; color: var(--accent); }
+    .c-lbl { font-size: 0.6rem; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 0.07em; display: block; }
+    .c-val { font-size: 0.84rem; color: var(--white); font-weight: 400; }
 
-    /* ── FOOTER ── */
-    footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.08); padding: 1.2rem 1.5rem; text-align: center; font-size: 0.7rem; color: rgba(255,255,255,0.25); }
+    /* Footer */
+    footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.08); padding: 1.1rem 5vw; font-size: 0.7rem; color: rgba(255,255,255,0.22); text-align: center; }
 
-    /* ── REVEAL ── */
-    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.5s ease, transform 0.5s ease; }
     .reveal.on { opacity: 1; transform: none; }
-    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.14s; }
 
-    /* ── TABLET AND UP (600px+) ── */
-    @media(min-width: 600px) {
-      nav { padding: 0 3rem; }
-      .section { padding: 4.5rem 3rem; }
-      .hero-content { padding: 4rem 3rem 3rem; }
-      .hero-photo-strip { padding: 1.5rem 3rem; }
-      .hero-stats { grid-template-columns: repeat(4, 1fr); }
-      .hstat:nth-child(2) { border-right: 1px solid var(--border); }
-      .hstat:nth-child(3) { border-bottom: none; }
-      .hstat:nth-child(1),
-      .hstat:nth-child(2),
-      .hstat:nth-child(3) { border-bottom: none; }
-      .pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-      .sgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-      footer { padding: 1.2rem 3rem; display: flex; justify-content: space-between; text-align: left; }
+    /* ─── TABLET 600px+ ───────────────────────────────────────── */
+    @media (min-width: 600px) {
+      :root { --nav-h: 60px; }
+      .sec { padding: 4.5rem 7vw; }
+      .hero-body { padding: 4rem 7vw 3rem; }
+      .hero-strip { padding: 1.2rem 7vw; }
+      .stats-grid { grid-template-columns: repeat(4, 1fr); }
+      .stat:nth-child(-n+2) { border-bottom: none; }
+      .stat:nth-child(odd) { border-right: none; }
+      .stat { border-right: 1px solid var(--border) !important; border-bottom: none !important; }
+      .stat:last-child { border-right: none !important; }
+      .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.1rem; }
+      .skill-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+      footer { text-align: left; display: flex; justify-content: space-between; }
     }
 
-    /* ── DESKTOP (900px+) ── */
-    @media(min-width: 900px) {
-      nav { padding: 0 5rem; }
-      .hamburger { display: none; }
-      .nav-links-desktop { display: flex; }
-      .nav-menu { display: none !important; }
+    /* ─── DESKTOP 960px+ ──────────────────────────────────────── */
+    @media (min-width: 960px) {
+      :root { --nav-h: 64px; }
+      .nav-ham { display: none; }
+      .nav-drawer { display: none !important; }
+      .nav-desktop { display: flex; }
 
-      #hero { flex-direction: row; min-height: 100vh; }
-      .hero-content { padding: 6rem 5rem; flex: 1; }
-      .hero-photo-strip { display: none; }
+      .hero { flex-direction: row; }
+      .hero-body { padding: 5rem 6vw; flex: 1; }
+      .hero-strip { display: none; }
 
-      .hero-right-panel {
-        width: 380px; flex-shrink: 0;
-        background: var(--ink);
+      .hero-sidebar {
         display: flex; flex-direction: column;
+        width: min(360px, 32vw); flex-shrink: 0;
+        background: var(--ink);
       }
-      .hero-photo-full {
-        flex: 1; overflow: hidden; position: relative; min-height: 300px;
+      .sidebar-photo {
+        flex: 1; overflow: hidden; position: relative; min-height: 280px;
       }
-      .hero-photo-full img {
-        width: 100%; height: 100%; object-fit: cover; object-position: center top;
-        display: block; filter: grayscale(10%);
-      }
-      .hero-photo-full .photo-fallback {
+      .sidebar-photo img {
         position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem;
+        width: 100%; height: 100%; object-fit: cover; object-position: center top;
+        filter: grayscale(8%);
       }
-      .hero-photo-full .photo-fallback svg { width: 48px; height: 48px; color: rgba(255,255,255,0.15); }
-      .hero-photo-full .photo-fallback p { font-size: 0.65rem; color: rgba(255,255,255,0.25); letter-spacing: 0.1em; text-transform: uppercase; }
-      .hero-desk-card {
-        padding: 1.6rem 2rem; border-top: 1px solid rgba(255,255,255,0.1);
+      .sidebar-photo .photo-ph {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.7rem;
       }
-      .hdc-name { font-family: var(--serif); font-size: 1rem; color: var(--white); margin-bottom: 0.15rem; }
-      .hdc-role { font-size: 0.7rem; color: rgba(255,255,255,0.45); margin-bottom: 1rem; }
-      .hdc-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-      .hdc-link { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; color: rgba(255,255,255,0.55); text-decoration: none; padding: 0.28rem 0.7rem; border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; transition: all 0.2s; }
-      .hdc-link svg { width: 9px; height: 9px; }
-      .hdc-link:hover { color: var(--white); border-color: rgba(255,255,255,0.35); }
+      .sidebar-photo .photo-ph svg { width: 44px; height: 44px; color: rgba(255,255,255,0.15); }
+      .sidebar-photo .photo-ph p { font-size: 0.62rem; color: rgba(255,255,255,0.22); letter-spacing: 0.1em; text-transform: uppercase; }
+      .sidebar-card {
+        padding: 1.5rem 1.8rem; border-top: 1px solid rgba(255,255,255,0.1);
+      }
+      .sidebar-name { font-family: var(--serif); font-size: 1rem; color: var(--white); margin-bottom: 0.15rem; }
+      .sidebar-role { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-bottom: 1rem; }
+      .sidebar-links { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+      .sd-link { display: inline-flex; align-items: center; gap: 0.28rem; font-size: 0.66rem; color: rgba(255,255,255,0.52); text-decoration: none; padding: 0.26rem 0.65rem; border: 1px solid rgba(255,255,255,0.14); border-radius: 20px; transition: all 0.18s; }
+      .sd-link svg { width: 9px; height: 9px; flex-shrink: 0; }
+      .sd-link:hover { color: var(--white); border-color: rgba(255,255,255,0.32); }
 
-      .section { padding: 6rem 5rem; max-width: 1100px; margin: 0 auto; }
-      .section-alt .section { max-width: 100%; }
-      .section-alt > .section { max-width: 1100px; margin: 0 auto; }
+      .sec { padding: 5.5rem 8vw; }
+      .sec-inner { max-width: 1060px; margin: 0 auto; }
 
-      .about-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; }
-      .about-facts { margin-top: 0; }
+      .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 4rem; align-items: start; }
+      .fact-table { margin-top: 0; }
 
-      .eitem { display: grid; grid-template-columns: 160px 1fr; gap: 2.5rem; }
-      .emeta { margin-bottom: 0; }
+      .exp { display: grid; grid-template-columns: 155px 1fr; gap: 2.5rem; }
+      .exp-meta { margin-bottom: 0; padding-top: 0.1rem; }
 
-      #contact .section { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1100px; margin: 0 auto; }
-      .clinks { margin-top: 0; }
+      .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+      .c-links { margin-top: 0; }
 
-      footer { padding: 1.2rem 5rem; }
+      footer { padding: 1.2rem 8vw; }
+    }
+
+    /* ─── LARGE 1200px+ ───────────────────────────────────────── */
+    @media (min-width: 1200px) {
+      .sec { padding: 6rem 0; }
+      .sec-inner { max-width: 1100px; padding: 0 2rem; }
     }
   </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav>
-  <a href="#hero" class="logo">A<em>.</em>Akangbe</a>
-  <button class="hamburger" id="ham" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-  <ul class="nav-links-desktop">
+<nav class="nav">
+  <a href="#hero" class="nav-logo">A<em>.</em>Akangbe</a>
+  <ul class="nav-desktop">
     <li><a href="#about">About</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="Abdulganiyu Akangbe CV.docx" class="nav-cv-d">Download CV</a></li>
+    <li><a href="Abdulganiyu Akangbe CV.docx" class="nav-btn">Download CV</a></li>
   </ul>
+  <button class="nav-ham" id="ham" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- Mobile menu -->
-<div class="nav-menu" id="navMenu">
-  <a href="#about" onclick="closeMenu()">About</a>
-  <a href="#projects" onclick="closeMenu()">Projects</a>
-  <a href="#experience" onclick="closeMenu()">Experience</a>
-  <a href="#skills" onclick="closeMenu()">Skills</a>
-  <a href="#contact" onclick="closeMenu()">Contact</a>
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="drawer" aria-hidden="true">
+  <a href="#about" class="drawer-link">About</a>
+  <a href="#projects" class="drawer-link">Projects</a>
+  <a href="#experience" class="drawer-link">Experience</a>
+  <a href="#skills" class="drawer-link">Skills</a>
+  <a href="#contact" class="drawer-link">Contact</a>
   <a href="Abdulganiyu Akangbe CV.docx">Download CV</a>
 </div>
 
 <!-- HERO -->
-<section id="hero">
-  <div class="hero-content">
-    <p class="hero-eyebrow">Operational Delivery and Data Analytics</p>
-    <h1>Abdulganiyu<br><span>Akangbe</span></h1>
-    <p class="hero-desc">Working at the intersection of <b>public service delivery and data</b>. Managing complex caseloads, supporting vulnerable families into employment, and using data to make that work sharper.</p>
-    <div class="hero-stats">
-      <div class="hstat"><span class="hstat-n">120+</span><span class="hstat-l">Cases managed</span></div>
-      <div class="hstat"><span class="hstat-n">32%</span><span class="hstat-l">Backlog cut</span></div>
-      <div class="hstat"><span class="hstat-n">70%</span><span class="hstat-l">First contact</span></div>
-      <div class="hstat"><span class="hstat-n">4+</span><span class="hstat-l">Years public sector</span></div>
+<section class="hero" id="hero">
+  <div class="hero-body">
+    <p class="hero-tag">Operational Delivery and Data Analytics</p>
+    <h1 class="hero-name">Abdulganiyu<span>Akangbe</span></h1>
+    <p class="hero-lead">Working at the intersection of <b>public service delivery and data</b>. Managing complex caseloads, supporting vulnerable families into employment, and using data to make that work sharper.</p>
+    <div class="stats-grid">
+      <div class="stat"><span class="stat-n">120+</span><span class="stat-l">Cases managed</span></div>
+      <div class="stat"><span class="stat-n">32%</span><span class="stat-l">Backlog cut</span></div>
+      <div class="stat"><span class="stat-n">70%</span><span class="stat-l">First contact</span></div>
+      <div class="stat"><span class="stat-n">4+</span><span class="stat-l">Years public sector</span></div>
     </div>
     <div class="hero-btns">
-      <a href="#projects" class="btn btn-dark">View Projects</a>
-      <a href="#contact" class="btn btn-ghost">Get in Touch</a>
-      <a href="Abdulganiyu Akangbe CV.docx" class="btn btn-ghost">Download CV</a>
+      <a href="#projects" class="btn btn-fill">View Projects</a>
+      <a href="#contact" class="btn btn-line">Get in Touch</a>
+      <a href="Abdulganiyu Akangbe CV.docx" class="btn btn-line">Download CV</a>
     </div>
   </div>
 
-  <!-- Mobile photo strip -->
-  <div class="hero-photo-strip">
-    <div class="hero-photo-thumb">
-      <img src="photo.jpg" alt="Abdulganiyu Akangbe" onerror="this.style.display='none'" />
-      <svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
+  <!-- Mobile strip -->
+  <div class="hero-strip">
+    <div class="strip-avatar">
+      <img src="photo.jpg" alt="Abdulganiyu Akangbe" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+      <svg style="display:none" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
     </div>
-    <div class="hero-strip-info">
-      <div class="hero-strip-name">Abdulganiyu Akangbe</div>
-      <div class="hero-strip-role">Welfare Support Officer · DWP Glasgow</div>
-      <div class="hero-strip-links">
-        <a href="https://www.linkedin.com/in/abdulganiyu-akangbe-083668240" target="_blank" class="slink">
+    <div class="strip-meta">
+      <div class="strip-name">Abdulganiyu Akangbe</div>
+      <div class="strip-role">Welfare Support Officer · DWP Glasgow</div>
+      <div class="strip-pills">
+        <a href="https://www.linkedin.com/in/abdulganiyu-akangbe-083668240" target="_blank" class="spill">
           <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           LinkedIn
         </a>
-        <a href="https://github.com/sheyid04" target="_blank" class="slink">
+        <a href="https://github.com/sheyid04" target="_blank" class="spill">
           <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C7.604 9.39 6.815 9.02 6.815 9.02c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
           GitHub
         </a>
@@ -344,115 +353,115 @@
     </div>
   </div>
 
-  <!-- Desktop photo panel (hidden on mobile) -->
-  <div class="hero-right-panel" style="display:none;">
-    <div class="hero-photo-full">
+  <!-- Desktop sidebar -->
+  <aside class="hero-sidebar">
+    <div class="sidebar-photo">
       <img src="photo.jpg" alt="Abdulganiyu Akangbe" onerror="this.style.display='none'" />
-      <div class="photo-fallback">
+      <div class="photo-ph">
         <svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
         <p>Upload photo.jpg</p>
       </div>
     </div>
-    <div class="hero-desk-card">
-      <div class="hdc-name">Abdulganiyu Akangbe</div>
-      <div class="hdc-role">Welfare Support Officer · DWP Glasgow</div>
-      <div class="hdc-links">
-        <a href="https://www.linkedin.com/in/abdulganiyu-akangbe-083668240" target="_blank" class="hdc-link">
+    <div class="sidebar-card">
+      <div class="sidebar-name">Abdulganiyu Akangbe</div>
+      <div class="sidebar-role">Welfare Support Officer · DWP Glasgow</div>
+      <div class="sidebar-links">
+        <a href="https://www.linkedin.com/in/abdulganiyu-akangbe-083668240" target="_blank" class="sd-link">
           <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           LinkedIn
         </a>
-        <a href="https://github.com/sheyid04" target="_blank" class="hdc-link">
+        <a href="https://github.com/sheyid04" target="_blank" class="sd-link">
           <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C7.604 9.39 6.815 9.02 6.815 9.02c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
           GitHub
         </a>
-        <a href="mailto:sheyid04@gmail.com" class="hdc-link">
+        <a href="mailto:sheyid04@gmail.com" class="sd-link">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
           Email
         </a>
       </div>
     </div>
-  </div>
+  </aside>
 </section>
 
 <!-- ABOUT -->
-<section id="about" class="section-alt">
-  <div class="section reveal">
+<section id="about" class="sec sec-warm">
+  <div class="sec-inner reveal">
     <p class="sec-tag">About</p>
     <h2>Who I Am</h2>
     <div class="rule"></div>
     <div class="about-grid">
-      <div class="about-text">
+      <div class="about-copy">
         <p>I am an operational delivery professional with over 4 years of experience managing complex caseloads, improving public service processes, and supporting vulnerable people to achieve real outcomes. My background spans <b>DWP, NHS Lanarkshire, and university research</b>.</p>
         <p>I currently hold dual roles at DWP as both an <b>Operational Delivery Officer</b> and <b>Welfare Support Officer</b> in Glasgow, working with parents and families affected by child poverty. I built Power BI dashboards that gave line managers breach visibility they did not have before, and triage systems that cut case backlogs by 32%.</p>
         <p>I am deepening my data practice through the <b>Cambridge Spark Data Citizen Apprenticeship</b> in partnership with DWP. MSc qualified. Glasgow based. Originally from Nigeria.</p>
-        <div class="about-facts">
-          <div class="arow"><span class="akey">Current role</span><span class="aval">Welfare Support Officer</span></div>
-          <div class="arow"><span class="akey">Also</span><span class="aval">Operational Delivery Officer</span></div>
-          <div class="arow"><span class="akey">Learning</span><span class="aval">Cambridge Spark Apprenticeship</span></div>
-          <div class="arow"><span class="akey">Education</span><span class="aval">MSc Chemical Engineering</span></div>
-          <div class="arow"><span class="akey">Location</span><span class="aval">Glasgow, Scotland</span></div>
-          <div class="arow"><span class="akey">Status</span><span class="aval">Open to opportunities</span></div>
-        </div>
+      </div>
+      <div class="fact-table">
+        <div class="frow"><span class="fkey">Current role</span><span class="fval">Welfare Support Officer</span></div>
+        <div class="frow"><span class="fkey">Also</span><span class="fval">Operational Delivery Officer</span></div>
+        <div class="frow"><span class="fkey">Learning</span><span class="fval">Cambridge Spark Apprenticeship</span></div>
+        <div class="frow"><span class="fkey">Education</span><span class="fval">MSc Chemical Engineering</span></div>
+        <div class="frow"><span class="fkey">Location</span><span class="fval">Glasgow, Scotland</span></div>
+        <div class="frow"><span class="fkey">Status</span><span class="fval">Open to opportunities</span></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- PROJECTS -->
-<section id="projects">
-  <div class="section reveal">
+<section id="projects" class="sec">
+  <div class="sec-inner reveal">
     <p class="sec-tag">Projects</p>
     <h2>Selected Work</h2>
     <div class="rule"></div>
-    <div class="pgrid">
-      <div class="pcard reveal d1">
+    <div class="project-grid">
+      <div class="pcard">
         <p class="ptype">Data and Operations</p>
         <h3>UC Caseload Dashboard</h3>
         <p>A Power BI dashboard visualising Universal Credit case data to track compliance risk, breach patterns, and case progression, giving managers early intervention capability.</p>
         <div class="ptags"><span class="ptag">Power BI</span><span class="ptag">DAX</span><span class="ptag">Excel</span><span class="ptag">CRM Data</span></div>
-        <span class="wip">In progress</span>
+        <span class="badge-wip">In progress</span>
       </div>
-      <div class="pcard reveal d2">
+      <div class="pcard">
         <p class="ptype">Data Analysis</p>
         <h3>Case Backlog Analyser</h3>
         <p>Identifies patterns in case escalations using open DWP datasets. Applies RAG priority logic to surface which cases need immediate action and which can be batched.</p>
         <div class="ptags"><span class="ptag">Python</span><span class="ptag">pandas</span><span class="ptag">Excel</span><span class="ptag">Data Cleaning</span></div>
-        <a href="https://github.com/sheyid04/case-backlog-analyser" target="_blank" class="live-link">
+        <a href="https://github.com/sheyid04/case-backlog-analyser" target="_blank" class="badge-live">
           <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C7.604 9.39 6.815 9.02 6.815 9.02c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
           View on GitHub
         </a>
       </div>
-      <div class="pcard reveal d1">
+      <div class="pcard">
         <p class="ptype">Reporting</p>
         <h3>Welfare Open Data Report</h3>
         <p>Analysis of publicly available welfare and employment statistics to identify trends in claimant progression, employment barriers, and regional disparities across Scotland.</p>
         <div class="ptags"><span class="ptag">SQL</span><span class="ptag">Power BI</span><span class="ptag">Government Data</span></div>
-        <span class="wip">In progress</span>
+        <span class="badge-wip">In progress</span>
       </div>
-      <div class="pcard reveal d2">
+      <div class="pcard">
         <p class="ptype">Apprenticeship Portfolio</p>
         <h3>Cambridge Spark Projects</h3>
         <p>Real workplace analytics and reporting projects from the Data Citizen Apprenticeship covering dashboarding, automation, data storytelling, and business intelligence.</p>
         <div class="ptags"><span class="ptag">Power BI</span><span class="ptag">Advanced Excel</span><span class="ptag">Python</span><span class="ptag">BI</span></div>
-        <span class="wip">In progress</span>
+        <span class="badge-wip">In progress</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- EXPERIENCE -->
-<section id="experience" class="section-alt">
-  <div class="section reveal">
+<section id="experience" class="sec sec-warm">
+  <div class="sec-inner reveal">
     <p class="sec-tag">Experience</p>
     <h2>Career History</h2>
     <div class="rule"></div>
-    <div>
-      <div class="eitem">
-        <div class="emeta"><div class="ewhen">Feb 2026 – Present</div><div class="ewhere">DWP, Glasgow</div></div>
+    <div class="exp-list">
+      <div class="exp">
+        <div class="exp-meta"><div class="exp-when">Feb 2026 – Present</div><div class="exp-org">DWP, Glasgow</div></div>
         <div>
-          <div class="etitle">Welfare Support Officer</div>
-          <div class="enote">Supporting parents in poverty across Glasgow Central District as part of DWP's partnership with Glasgow City Council on child poverty.</div>
-          <ul class="ebullets">
+          <div class="exp-title">Welfare Support Officer</div>
+          <div class="exp-note">Supporting parents in poverty across Glasgow Central District as part of DWP's partnership with Glasgow City Council on child poverty.</div>
+          <ul class="exp-bullets">
             <li>Manage <b>80+ parent caseloads</b> with 70% first-contact resolution accuracy</li>
             <li>Increased referral uptake across <b>12+ partner organisations</b> by 40%</li>
             <li>Placed <b>15+ claimants into employment</b> within the first 6 months</li>
@@ -461,12 +470,12 @@
           </ul>
         </div>
       </div>
-      <div class="eitem">
-        <div class="emeta"><div class="ewhen">Apr 2025 – Present</div><div class="ewhere">DWP, UK</div></div>
+      <div class="exp">
+        <div class="exp-meta"><div class="exp-when">Apr 2025 – Present</div><div class="exp-org">DWP, UK</div></div>
         <div>
-          <div class="etitle">Operational Delivery Officer</div>
-          <div class="enote">Managing Universal Credit caseloads and building data tools to improve operational visibility and compliance.</div>
-          <ul class="ebullets">
+          <div class="exp-title">Operational Delivery Officer</div>
+          <div class="exp-note">Managing Universal Credit caseloads and building data tools to improve operational visibility and compliance.</div>
+          <ul class="exp-bullets">
             <li>Manage <b>120+ UC cases</b>, reducing non-engagement by over 30%</li>
             <li>Built Power BI dashboards improving breach visibility by <b>38%</b></li>
             <li>Triaged 200+ escalations, cutting case backlog by <b>32%</b></li>
@@ -475,11 +484,11 @@
           </ul>
         </div>
       </div>
-      <div class="eitem">
-        <div class="emeta"><div class="ewhen">May 2023 – Apr 2025</div><div class="ewhere">NHS Lanarkshire</div></div>
+      <div class="exp">
+        <div class="exp-meta"><div class="exp-when">May 2023 – Apr 2025</div><div class="exp-org">NHS Lanarkshire</div></div>
         <div>
-          <div class="etitle">Frontline Operational Support Officer</div>
-          <ul class="ebullets">
+          <div class="exp-title">Frontline Operational Support Officer</div>
+          <ul class="exp-bullets">
             <li>Reduced documentation errors by <b>25%</b> through workflow redesign</li>
             <li>Contributed to an <b>18% reduction</b> in average patient waiting times</li>
             <li>Cut urgent supply requests by <b>40%</b> with a stock rotation system</li>
@@ -488,12 +497,12 @@
           </ul>
         </div>
       </div>
-      <div class="eitem">
-        <div class="emeta"><div class="ewhen">Nov 2022 – May 2023</div><div class="ewhere">University of the West of Scotland</div></div>
+      <div class="exp">
+        <div class="exp-meta"><div class="exp-when">Nov 2022 – May 2023</div><div class="exp-org">University of the West of Scotland</div></div>
         <div>
-          <div class="etitle">Research Officer</div>
-          <div class="enote">Funded laboratory research into microalgae cultivation for renewable energy applications.</div>
-          <ul class="ebullets">
+          <div class="exp-title">Research Officer</div>
+          <div class="exp-note">Funded laboratory research into microalgae cultivation for renewable energy applications.</div>
+          <ul class="exp-bullets">
             <li>Demonstrated a <b>17.5% increase</b> in biomass productivity under blue LED light</li>
             <li>Achieved a validated specific growth rate of <b>3.526 per day</b></li>
             <li>Identified the optimal lipid extraction solvent across multi-solvent trials</li>
@@ -505,53 +514,57 @@
 </section>
 
 <!-- SKILLS -->
-<section id="skills">
-  <div class="section reveal">
+<section id="skills" class="sec">
+  <div class="sec-inner reveal">
     <p class="sec-tag">Skills</p>
     <h2>What I Work With</h2>
     <div class="rule"></div>
-    <div class="sgrid">
+    <div class="skill-grid">
       <div class="sblock">
         <h4>Data and Analytics</h4>
-        <div class="spills"><span class="spill">Power BI</span><span class="spill">Advanced Excel</span><span class="spill">DAX</span><span class="spill">Data Visualisation</span><span class="spill">Dashboarding</span><span class="spill">Data Storytelling</span><span class="spill">SQL (developing)</span><span class="spill">Python (developing)</span></div>
+        <div class="skill-pills"><span class="sk">Power BI</span><span class="sk">Advanced Excel</span><span class="sk">DAX</span><span class="sk">Data Visualisation</span><span class="sk">Dashboarding</span><span class="sk">Data Storytelling</span><span class="sk">SQL (developing)</span><span class="sk">Python (developing)</span></div>
       </div>
       <div class="sblock">
         <h4>Operational Delivery</h4>
-        <div class="spills"><span class="spill">Caseload Management</span><span class="spill">UC Compliance</span><span class="spill">RAG Triage</span><span class="spill">Process Improvement</span><span class="spill">Audit and Compliance</span><span class="spill">Escalation Handling</span></div>
+        <div class="skill-pills"><span class="sk">Caseload Management</span><span class="sk">UC Compliance</span><span class="sk">RAG Triage</span><span class="sk">Process Improvement</span><span class="sk">Audit and Compliance</span><span class="sk">Escalation Handling</span></div>
       </div>
       <div class="sblock">
         <h4>Strategy and Policy</h4>
-        <div class="spills"><span class="spill">Policy Development</span><span class="spill">Governance Design</span><span class="spill">Risk Analysis</span><span class="spill">Change Management</span><span class="spill">Strategic Communication</span><span class="spill">Stakeholder Engagement</span></div>
+        <div class="skill-pills"><span class="sk">Policy Development</span><span class="sk">Governance Design</span><span class="sk">Risk Analysis</span><span class="sk">Change Management</span><span class="sk">Strategic Communication</span><span class="sk">Stakeholder Engagement</span></div>
       </div>
       <div class="sblock">
         <h4>Tools and Platforms</h4>
-        <div class="spills"><span class="spill">Microsoft 365</span><span class="spill">CRM Systems</span><span class="spill">GitHub</span><span class="spill">MATLAB</span><span class="spill">Aspen HYSYS</span></div>
+        <div class="skill-pills"><span class="sk">Microsoft 365</span><span class="sk">CRM Systems</span><span class="sk">GitHub</span><span class="sk">MATLAB</span><span class="sk">Aspen HYSYS</span></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact">
-  <div class="section reveal">
-    <p class="sec-tag">Contact</p>
-    <h2>Get In Touch</h2>
-    <div class="rule"></div>
-    <p>Open to data analyst, reporting analyst, business intelligence, and operational delivery roles. Based in Glasgow. Always happy to connect.</p>
-    <a href="Abdulganiyu Akangbe CV.docx" class="btn" style="background:var(--accent);color:#fff;margin-bottom:0.5rem;">Download CV</a>
-    <div class="clinks">
-      <a href="mailto:sheyid04@gmail.com" class="clink">
-        <div class="cicon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
-        <div><span class="clabel">Email</span><span class="cval">sheyid04@gmail.com</span></div>
-      </a>
-      <a href="https://www.linkedin.com/in/abdulganiyu-akangbe-083668240" target="_blank" class="clink">
-        <div class="cicon"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
-        <div><span class="clabel">LinkedIn</span><span class="cval">abdulganiyu-akangbe</span></div>
-      </a>
-      <a href="https://github.com/sheyid04" target="_blank" class="clink">
-        <div class="cicon"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C7.604 9.39 6.815 9.02 6.815 9.02c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg></div>
-        <div><span class="clabel">GitHub</span><span class="cval">github.com/sheyid04</span></div>
-      </a>
+<section id="contact" class="sec sec-dark">
+  <div class="sec-inner reveal">
+    <div class="contact-grid">
+      <div class="contact-text">
+        <p class="sec-tag">Contact</p>
+        <h2>Get In Touch</h2>
+        <div class="rule"></div>
+        <p>Open to data analyst, reporting analyst, business intelligence, and operational delivery roles. Based in Glasgow. Always happy to connect.</p>
+        <a href="Abdulganiyu Akangbe CV.docx" class="btn btn-accent">Download CV</a>
+      </div>
+      <div class="c-links">
+        <a href="mailto:sheyid04@gmail.com" class="c-link">
+          <div class="c-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+          <div><span class="c-lbl">Email</span><span class="c-val">sheyid04@gmail.com</span></div>
+        </a>
+        <a href="https://www.linkedin.com/in/abdulganiyu-akangbe-083668240" target="_blank" class="c-link">
+          <div class="c-icon"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
+          <div><span class="c-lbl">LinkedIn</span><span class="c-val">abdulganiyu-akangbe</span></div>
+        </a>
+        <a href="https://github.com/sheyid04" target="_blank" class="c-link">
+          <div class="c-icon"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C7.604 9.39 6.815 9.02 6.815 9.02c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg></div>
+          <div><span class="c-lbl">GitHub</span><span class="c-val">github.com/sheyid04</span></div>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -562,31 +575,30 @@
 </footer>
 
 <script>
-  // Hamburger menu
   const ham = document.getElementById('ham');
-  const menu = document.getElementById('navMenu');
+  const drawer = document.getElementById('drawer');
+
   ham.addEventListener('click', () => {
-    ham.classList.toggle('open');
-    menu.classList.toggle('open');
+    const open = ham.classList.toggle('is-open');
+    drawer.classList.toggle('is-open', open);
+    ham.setAttribute('aria-expanded', open);
+    drawer.setAttribute('aria-hidden', !open);
   });
-  function closeMenu() {
-    ham.classList.remove('open');
-    menu.classList.remove('open');
-  }
 
-  // Show desktop photo panel on large screens
-  function handleResize() {
-    const panel = document.querySelector('.hero-right-panel');
-    if (panel) panel.style.display = window.innerWidth >= 900 ? 'flex' : 'none';
-  }
-  handleResize();
-  window.addEventListener('resize', handleResize);
+  document.querySelectorAll('.drawer-link').forEach(a => {
+    a.addEventListener('click', () => {
+      ham.classList.remove('is-open');
+      drawer.classList.remove('is-open');
+      ham.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+    });
+  });
 
-  // Scroll reveal
   const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('on'); obs.unobserve(e.target); } });
-  }, { threshold: 0.07 });
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: 0.06 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 </body>
 </html>
+HTMLEOF
